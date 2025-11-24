@@ -3,3 +3,4 @@ listings.json
 token.json
 venv/
 .env
+*pycache*
