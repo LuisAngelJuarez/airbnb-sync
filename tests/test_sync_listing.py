@@ -3,7 +3,7 @@ import json
 import datetime as dt
 from googleapiclient.errors import HttpError
 
-from app.google_client import get_google_service
+from app.connectors.google_client import get_google_service
 from app.config import load_listings
 from app.sync import sync_listing
 

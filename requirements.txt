@@ -5,3 +5,4 @@ google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.1
 icalendar==5.0.13
 requests==2.32.3
+redis

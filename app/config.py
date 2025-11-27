@@ -11,6 +11,10 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 # Nombre de la variable de entorno que contiene la lista de cabañas
 LISTINGS_ENV_VAR = "LISTINGS_JSON"
 
+# Redis
+REDIS_URL = os.getenv("REDIS_URL")
+print(f"[config] REDIS_URL desde config.py = {repr(REDIS_URL)}")
+
 
 def load_listings() -> List[Dict[str, Any]]:
     """

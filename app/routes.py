@@ -1,7 +1,7 @@
 # routes.py
 from flask import Blueprint, jsonify
 from .sync import sync_all
-from .google_client import get_google_service  # ⬅️ importa aquí
+from .connectors.google_client import get_google_service  # ⬅️ importa aquí
 
 bp = Blueprint("main", __name__)
 

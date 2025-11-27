@@ -3,7 +3,7 @@ import datetime as dt
 from googleapiclient.errors import HttpError
 from zoneinfo import ZoneInfo
 
-from app.google_client import get_google_service
+from app.connectors.google_client import get_google_service
 from app.config import TIMEZONE
 
 # 👇 Pega aquí el ID del calendario de PRUEBAS

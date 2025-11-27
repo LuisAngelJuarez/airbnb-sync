@@ -1,6 +1,6 @@
 # test_sync_all.py  (más claro que test_sync_listing)
 import json
-from app.google_client import get_google_service
+from app.connectors.google_client import get_google_service
 from app.config import load_listings
 from app.sync import sync_all
 

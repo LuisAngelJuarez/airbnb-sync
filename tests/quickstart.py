@@ -2,7 +2,7 @@
 import datetime
 from googleapiclient.errors import HttpError
 
-from app.google_client import get_google_service  # ⬅️ usamos tu función
+from app.connectors.google_client import get_google_service  # ⬅️ usamos tu función
 
 
 def main():

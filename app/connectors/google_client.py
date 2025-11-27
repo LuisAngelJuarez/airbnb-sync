@@ -8,7 +8,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import google.auth  # 👈 para default credentials (Cloud Run, SA, etc.)
 
-from .config import SCOPES  # ["https://www.googleapis.com/auth/calendar"]
+from ..config import SCOPES  # ["https://www.googleapis.com/auth/calendar"]
 
 
 def _get_user_oauth_creds_from_env():
