@@ -682,14 +682,15 @@ def mirror_tidycal_to_airbnb_calendar(
 
     dst_events = dst_resp.get("items", [])
 
+    # Índice de eventos ya espejados por mirror_key
     existing_by_key: Dict[str, Dict[str, Any]] = {}
     for ev in dst_events:
         ep = ev.get("extendedProperties", {}).get("private", {}) or {}
         if ep.get("source") == "tidycal" and ep.get("mirror_key"):
             existing_by_key[ep["mirror_key"]] = ev
 
-    # 3) Crear espejos nuevos (o reemplazar existentes)
-    src_keys = set()
+    # 3) Crear espejos nuevos (o reemplazar existentes si cambian)
+    src_keys: Set[str] = set()
     for idx, src in enumerate(src_events, start=1):
         status = src.get("status")
         raw_start = src.get("start", {})
@@ -762,35 +763,66 @@ def mirror_tidycal_to_airbnb_calendar(
         else:
             description = f"Espejo TidyCal para {listing_name}"
 
-        # 3.a Si ya existe mirror con ese key → borrar y recrear como all-day
+        desired_summary = f"[Block Airbnb] {summary_for_mirror}"
+        desired_start_str = desired_start_date.isoformat()
+        desired_end_str = desired_end_date.isoformat()
+
+        # 3.a Si ya existe mirror con ese key → dejarlo si ya coincide todo
         existing = existing_by_key.get(src_key)
         if existing:
-            ev_id = existing.get("id")
-            if ev_id:
-                try:
-                    service.events().delete(
-                        calendarId=dst_calendar_id,
-                        eventId=ev_id,
-                    ).execute()
-                    print(
-                        f"  [mirror:🗑 replace] {listing_name} ev#{idx}: "
-                        f"borrado mirror previo (mirror_key={src_key})"
-                    )
-                    stats["deleted"] += 1
-                except HttpError as e:
-                    print(f"  [mirror:⚠ error] delete previo {listing_name} ev#{idx}: {e}")
-                    stats["errors"] += 1
-                    # seguimos, intentamos crear de todos modos
+            existing_start_date = existing.get("start", {}).get("date")
+            existing_end_date = existing.get("end", {}).get("date")
+            existing_summary = existing.get("summary")
+            existing_description = (existing.get("description") or "").strip()
+            existing_ep = existing.get("extendedProperties", {}).get("private", {}) or {}
 
-        # 3.b Crear mirror all-day
+            same_dates = (
+                existing_start_date == desired_start_str and
+                existing_end_date == desired_end_str
+            )
+            same_summary = existing_summary == desired_summary
+            same_description = existing_description == description.strip()
+            same_meta = (
+                existing_ep.get("source") == "tidycal" and
+                existing_ep.get("listing_name") == listing_name and
+                existing_ep.get("mirror_key") == src_key and
+                existing_ep.get("src_calendar_id") == src_calendar_id
+            )
+
+            if same_dates and same_summary and same_description and same_meta:
+                print(
+                    f"  [mirror:keep] {listing_name} ev#{idx}: "
+                    f"mirror ya coincide, no se borra ni recrea."
+                )
+                # Ya está correcto, seguimos con el siguiente origen
+                continue
+            else:
+                ev_id = existing.get("id")
+                if ev_id:
+                    try:
+                        service.events().delete(
+                            calendarId=dst_calendar_id,
+                            eventId=ev_id,
+                        ).execute()
+                        print(
+                            f"  [mirror:🗑 replace] {listing_name} ev#{idx}: "
+                            f"borrado mirror previo (mirror_key={src_key})"
+                        )
+                        stats["deleted"] += 1
+                    except HttpError as e:
+                        print(f"  [mirror:⚠ error] delete previo {listing_name} ev#{idx}: {e}")
+                        stats["errors"] += 1
+                        # seguimos, intentamos crear de todos modos
+
+        # 3.b Crear mirror all-day (si no existía, o si lo acabamos de borrar)
         new_body = {
-            "summary": f"[Block Airbnb] {summary_for_mirror}",
+            "summary": desired_summary,
             "description": description,
             "start": {
-                "date": desired_start_date.isoformat(),
+                "date": desired_start_str,
             },
             "end": {
-                "date": desired_end_date.isoformat(),
+                "date": desired_end_str,
             },
             "transparency": "opaque",
             "extendedProperties": {
@@ -847,7 +879,6 @@ def mirror_tidycal_to_airbnb_calendar(
         f"deleted={stats['deleted']} errors={stats['errors']}"
     )
     return stats
-
 
 # ============================
 # Orquestadores
