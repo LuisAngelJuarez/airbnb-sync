@@ -98,6 +98,7 @@ def build_availability_snapshot(
                 "beds": info.get("beds", []),
                 "description": info.get("description", ""),
                 "tidycal_url": info.get("tidycal_url"),
+                "price_per_night": info.get("price_per_night"),
                 "blocked_nights": blocked_nights,
             }
         )
