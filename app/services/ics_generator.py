@@ -20,12 +20,17 @@ def generate_ics_for_listing(listing_cfg: Dict[str, Any], days_ahead: int = 365)
 
     bookings = tidycal_list_bookings_in_range(today, end_date)
 
+    # Usamos el slug (ASCII puro) en PRODID para evitar problemas de encoding
+    # en parsers de iCal que no manejan bien UTF-8 en propiedades de cabecera
+    slug = listing_cfg.get("info", {}).get("slug", listing_name)
+
     cal = icalendar.Calendar()
-    cal.add("prodid", f"-//Airbnb Sync//{listing_name}//ES")
+    cal.add("prodid", f"-//Airbnb Sync//{slug}//ES")
     cal.add("version", "2.0")
     cal.add("calscale", "GREGORIAN")
     cal.add("method", "PUBLISH")
     cal.add("x-wr-calname", listing_name)
+    cal.add("x-wr-timezone", TIMEZONE)
 
     now_utc = dt.datetime.now(dt.timezone.utc)
 

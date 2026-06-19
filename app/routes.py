@@ -38,7 +38,6 @@ def listing_calendar(slug: str):
         ics_bytes,
         status=200,
         mimetype="text/calendar",
-        headers={"Content-Disposition": f'attachment; filename="{slug}.ics"'},
     )
 
 
