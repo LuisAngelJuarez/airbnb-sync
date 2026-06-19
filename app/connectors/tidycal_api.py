@@ -115,7 +115,9 @@ def tidycal_list_bookings_in_range(
         except ValueError:
             continue
 
-        starts_date = starts_at_dt.date()
+        # Comparamos por FECHA LOCAL (TIMEZONE), no por la fecha UTC,
+        # para evitar desfases cerca de medianoche.
+        starts_date = starts_at_dt.astimezone(TZ_LOCAL).date()
         if not (start_date <= starts_date < end_date):
             continue
 

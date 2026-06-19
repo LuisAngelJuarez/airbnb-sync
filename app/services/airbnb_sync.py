@@ -165,6 +165,8 @@ def sync_airbnb_to_tidycal(
 
     print(f"[airbnb→tidycal] Sincronizando Airbnb → TidyCal para '{listing_cfg['name']}'")
 
+    today = dt.datetime.now(TZ_LOCAL).date()
+
     booking_type_id = listing_cfg.get("tidycal_booking_type_id")
     airbnb_contact_email = listing_cfg.get("airbnb_contact_email")
 
@@ -185,23 +187,19 @@ def sync_airbnb_to_tidycal(
     airbnb_by_date: Dict[dt.date, Dict[str, Any]] = {}
     for slot in airbnb_slots.values():
         day = slot.get("date")
-        if isinstance(day, dt.date) and day not in airbnb_by_date:
+        # Solo sincronizamos desde HOY (incluido) hacia adelante
+        if isinstance(day, dt.date) and day >= today and day not in airbnb_by_date:
             airbnb_by_date[day] = slot
 
     airbnb_dates: Set[dt.date] = set(airbnb_by_date.keys())
 
     if airbnb_dates:
-        min_date = min(airbnb_dates)
         max_date = max(airbnb_dates)
     else:
-        # Si no hay nada en Airbnb, de todos modos revisamos un rango razonable
-        today = dt.date.today()
-        min_date = today
-        max_date = today + dt.timedelta(days=days_ahead)
+        max_date = today
 
-    # Expandimos un poco el rango para cubrir cambios cercanos
-    today = dt.date.today()
-    start_date = min(min_date, today)
+    # Solo miramos bookings desde hoy hacia adelante
+    start_date = today
     end_date = max(max_date, today + dt.timedelta(days=days_ahead))
 
     # 2) Leer bookings actuales en TidyCal en ese rango
@@ -221,6 +219,10 @@ def sync_airbnb_to_tidycal(
         starts_at = b.get("starts_at")
         day = booking_date_from_starts_at_utc(starts_at)
         if day is None:
+            continue
+
+        # Solo sincronizamos desde HOY (incluido) hacia adelante
+        if day < today:
             continue
 
         # Si hubiera doble booking el mismo día con el mismo email+type,

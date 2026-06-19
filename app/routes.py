@@ -1,7 +1,9 @@
 # routes.py
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, Response
+
 from .sync import sync_all
-from .connectors.google_client import get_google_service  # ⬅️ importa aquí
+from .config import load_listings
+from .services.ics_generator import generate_ics_for_listing
 
 bp = Blueprint("main", __name__)
 
@@ -11,31 +13,33 @@ def health():
     return "OK", 200
 
 
-@bp.route("/debug-calendar", methods=["GET"])
-def debug_calendar():
-    """
-    Ruta de debug para ver qué calendarios ve la credencial que usa Flask.
-    """
-    service = get_google_service()
-    cal_list = service.calendarList().list().execute()
-    items = [
-        {"id": item["id"], "summary": item.get("summary")}
-        for item in cal_list.get("items", [])
-    ]
-    return jsonify({"calendars": items}), 200
-
-
 @bp.route("/sync", methods=["GET", "POST"])
 def sync_handler():
-    """
-    Endpoint para lanzar la sincronización de todas las cabañas.
-    """
     try:
         summary = sync_all()
         return jsonify({"status": "ok", "details": summary}), 200
     except Exception as e:
         print(f"[sync] Error: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@bp.route("/calendar/<slug>.ics", methods=["GET"])
+def listing_calendar(slug: str):
+    listings = load_listings()
+    listing_cfg = next(
+        (l for l in listings if l.get("info", {}).get("slug") == slug),
+        None,
+    )
+    if not listing_cfg:
+        return f"Listing '{slug}' no encontrado", 404
+
+    ics_bytes = generate_ics_for_listing(listing_cfg)
+    return Response(
+        ics_bytes,
+        status=200,
+        mimetype="text/calendar",
+        headers={"Content-Disposition": f'attachment; filename="{slug}.ics"'},
+    )
 
 
 def register_routes(app):

@@ -1,12 +1,92 @@
 [
-  {
-    "name": "Cabaña2",
-    "airbnb_ical_url": "https://www.airbnb.mx/calendar/ical/50598037.ics?s=9bafe6184c46a6d34bbe522de5e11c21",
-    "tidycal_booking_type_id": 1199989,
-    "airbnb_contact_email": "airbnb-cabana2@tudominio.com",
-    "tidycal_calendar_id": "5bdee3fb30e8b7440cdacf435a95853b427c701f48c88fc4678f9f5287d08fae@group.calendar.google.com",
-    "mirror_calendar_id": "31282b70b3fbc5d9aef7267ffa10870822a264c448ecfb0fd90206c0b65521bf@group.calendar.google.com",
-    "init_time": "22:00",
-    "finish_time": "22:01"
-  }
+    {
+        "name": "Cabaña2",
+        "airbnb_ical_url": "https://www.airbnb.mx/calendar/ical/50598037.ics?s=9bafe6184c46a6d34bbe522de5e11c21",
+        "tidycal_booking_type_id": 1199989,
+        "airbnb_contact_email": "airbnb-cabana2@tudominio.com",
+        "init_time": "22:00",
+        "finish_time": "22:01",
+        "info": {
+            "slug": "cabana2",
+            "capacity": 2,
+            "has_kitchen": false,
+            "has_private_bathroom": true,
+            "has_ac": true,
+            "wifi": true,
+            "beds": [
+                "matrimonial"
+            ],
+            "description": "Cabaña acogedora para 2 personas con cama matrimonial, A/C, baño privado y Wi-Fi. A unos pasos de la playa y con acceso a la alberca.",
+            "tidycal_url": "https://tidycal.com/loscachimbos/cabana2",
+            "price_per_night": 800
+        }
+    },
+    {
+        "name": "Cabaña3",
+        "tidycal_booking_type_id": 1200360,
+        "airbnb_contact_email": "airbnb-cabana3@tudominio.com",
+        "airbnb_ical_url": "https://www.airbnb.mx/calendar/ical/1134770978285054066.ics?s=d06cc598efebe0694c6803d3a45ff1bd",
+        "init_time": "22:01",
+        "finish_time": "22:02",
+        "info": {
+            "slug": "cabana3",
+            "capacity": 3,
+            "has_kitchen": true,
+            "has_private_bathroom": true,
+            "has_ac": true,
+            "wifi": true,
+            "beds": [
+                "matrimonial",
+                "individual"
+            ],
+            "description": "Cabaña para 3 personas con cocineta, A/C, baño privado y Wi-Fi. Ideal para estancias largas y familias pequeñas.",
+            "tidycal_url": "https://tidycal.com/loscachimbos/cabana3",
+            "price_per_night": 1200
+        }
+    },
+    {
+        "name": "Cabaña4",
+        "tidycal_booking_type_id": 1200363,
+        "airbnb_contact_email": "airbnb-cabana4@tudominio.com",
+        "airbnb_ical_url": "https://www.airbnb.mx/calendar/ical/1134774624424002391.ics?s=11d9d3ae0d4113c23d2a32c426f9eb33",
+        "init_time": "22:02",
+        "finish_time": "22:03",
+        "info": {
+            "slug": "cabana4",
+            "capacity": 6,
+            "has_kitchen": true,
+            "has_private_bathroom": true,
+            "has_ac": true,
+            "wifi": true,
+            "beds": [
+                "king size",
+                "individual"
+            ],
+            "description": "Cabaña amplia para 4 a 6 personas, con cocina equipada, baño privado, A/C y Wi-Fi. Perfecta para familias grandes o grupos, muy cerca de la alberca.",
+            "tidycal_url": "https://tidycal.com/loscachimbos/cabana4",
+            "price_per_night": 1600
+        }
+    },
+    {
+        "name": "Cabaña5",
+        "tidycal_booking_type_id": 1782910,
+        "airbnb_contact_email": "airbnb-cabana5@tudominio.com",
+        "airbnb_ical_url": "https://www.airbnb.mx/calendar/ical/1632145796794335671.ics?t=efe952ce4e09471e80ff2cf039145ce6",
+        "init_time": "22:03",
+        "finish_time": "22:04",
+        "info": {
+            "slug": "cabana5",
+            "capacity": 2,
+            "has_kitchen": false,
+            "has_private_bathroom": true,
+            "has_ac": true,
+            "wifi": true,
+            "beds": [
+                "matrimonial"
+            ],
+            "description": "Cabaña acogedora para 2 personas con cama matrimonial, A/C, baño privado y Wi-Fi. Con balcon, con vista al mar y con acceso a la alberca.",
+            "tidycal_url": "https://tidycal.com/loscachimbos/cabana5",
+            "price_per_night": 1200
+        }
+    }
 ]

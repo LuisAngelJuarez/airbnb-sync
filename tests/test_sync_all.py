@@ -1,6 +1,5 @@
-# test_sync_all.py  (más claro que test_sync_listing)
+# test_sync_all.py
 import json
-from app.connectors.google_client import get_google_service
 from app.config import load_listings
 from app.sync import sync_all
 
@@ -17,8 +16,6 @@ def main():
     if not listings:
         print("❌ No hay listings para sincronizar (LISTINGS_JSON vacío)")
         return
-
-    service = get_google_service()
 
     print("👉 Ejecutando sync_all() ...\n")
     results = sync_all()
