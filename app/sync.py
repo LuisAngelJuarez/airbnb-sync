@@ -16,8 +16,13 @@ def sync_listing(listing_cfg: Dict[str, Any]) -> Dict[str, Any]:
     print(f"Sincronizando: {listing_cfg['name']}")
     print("============================")
 
-    cal = fetch_airbnb_calendar(listing_cfg["airbnb_ical_url"])
-    airbnb_stats = sync_airbnb_to_tidycal(cal, listing_cfg)
+    airbnb_url = listing_cfg.get("airbnb_ical_url", "")
+    airbnb_stats = {"created": 0, "cancelled": 0, "errors": 0}
+    if airbnb_url:
+        cal = fetch_airbnb_calendar(airbnb_url)
+        airbnb_stats = sync_airbnb_to_tidycal(cal, listing_cfg)
+    else:
+        print(f"[sync_listing] {listing_cfg['name']}: sin airbnb_ical_url, se omite sync de Airbnb.")
 
     blocked_nights = get_blocked_nights_for_listing(listing_cfg)
 
